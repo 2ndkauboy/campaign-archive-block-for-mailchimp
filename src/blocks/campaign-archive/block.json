@@ -1,0 +1,38 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "cabfm/campaign-archive",
+	"title": "Campaign Archive",
+	"category": "widgets",
+	"description": "Display newsletters from a Mailchimp campaign.",
+	"keywords": [ "mailchimp", "feed", "archive", "campaign", "newsletter" ],
+	"textdomain": "campaign-archive-block-for-mailchimp",
+	"attributes": {
+		"itemsToShow": {
+			"type": "number",
+			"default": 5
+		},
+		"campaignTitle": {
+			"type": "string",
+			"default": "subject"
+		},
+		"displaySender": {
+			"type": "boolean",
+			"default": false
+		},
+		"displayDate": {
+			"type": "boolean",
+			"default": false
+		},
+		"displayTime": {
+			"type": "boolean",
+			"default": false
+		}
+  },
+	"supports": {
+		"align": true,
+		"html": false
+	},
+	"editorStyle": "campaign-archive-block-for-mailchimp-editor",
+	"style": "campaign-archive-block-for-mailchimp"
+}

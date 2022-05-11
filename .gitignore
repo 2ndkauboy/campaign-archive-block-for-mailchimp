@@ -1,0 +1,5 @@
+*.css.map
+*.lock
+/build/
+/node_modules/
+/vendor/
