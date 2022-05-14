@@ -10,7 +10,7 @@
  * Plugin Name: Campaign Archive Block for Mailchimp
  * Plugin URI: https://github.com/2ndkauboy/campaign-archive-block-for-mailchimp
  * Description: Adds a block to show an archive for Mailchimp Campaigns.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Bernhard Kau
  * Author URI: https://kau-boys.de
  * Text Domain: campaign-archive-block-for-mailchimp
@@ -18,7 +18,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-define( 'CABFM_VERSION', '1.0.1' );
+define( 'CABFM_VERSION', '1.0.2' );
 define( 'CABFM_FILE', __FILE__ );
 define( 'CABFM_PATH', plugin_dir_path( CABFM_FILE ) );
 define( 'CABFM_URL', plugin_dir_url( CABFM_FILE ) );

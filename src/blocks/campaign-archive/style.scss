@@ -1,11 +1,6 @@
-ul.wp-block-cabfm-campaign-archive { // The ul is needed for specificity to override the reset styles in the editor.
+.wp-block-cabfm-campaign-archive {
 	list-style: none;
 	padding: 0;
-
-	// This needs extra specificity due to the reset mixin on the parent: https://github.com/WordPress/gutenberg/blob/a250e9e5fe00dd5195624f96a3d924e7078951c3/packages/edit-post/src/style.scss#L54
-	&.wp-block-cabfm-campaign-archive {
-		box-sizing: border-box;
-	}
 
 	&.alignleft {
 
@@ -17,6 +12,11 @@ ul.wp-block-cabfm-campaign-archive { // The ul is needed for specificity to over
 
 		/*rtl:ignore*/
 		margin-left: 2em;
+	}
+
+	li {
+		margin-left: 0;
+		margin-right: 0;
 	}
 }
 
