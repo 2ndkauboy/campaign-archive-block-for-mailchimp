@@ -13,3 +13,4 @@ package.json
 package-lock.json
 phpcs.xml
 .stylelintrc.json
+.wordpress-org
