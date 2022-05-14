@@ -22,6 +22,10 @@ This is not an official Mailchimp plugin. Mailchimp® is [a registered trademark
 
 In order to be able to use the plugin, you have to get API credentials from Mailchimp. You can find them in the [API keys section](https://us1.admin.mailchimp.com/account/api/) of your Mailchimp account. You can also find a guide on how to "[Generate your API key](https://mailchimp.com/developer/marketing/guides/quick-start/#generate-your-api-key)" in the Mailchimp Marketing API documentation.
 
+## Screenshots
+
+1. The block settings to adjust the number of items and fields to show in the list.
+
 ## Changelog
 
 ### 1.0.3
