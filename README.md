@@ -7,6 +7,7 @@ Tested up to: 6.0
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
+Tags: blocks, campaign, archive, mailchimp, block
 
 Adds a block to show an archive for Mailchimp Campaigns.
 
