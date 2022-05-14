@@ -3,7 +3,7 @@
 Contributors: Kau-Boy
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7914504
 Requires at least: 5.0
-Tested up to: 5.9
+Tested up to: 6.0
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
@@ -24,7 +24,7 @@ In order to be able to use the plugin, you have to get API credentials from Mail
 ## Changelog
 
 ### 1.0.3
-* Remove horizontal margin from the unorderes list as well
+* Remove horizontal margin from the unordered list as well
 
 ### 1.0.2
 * Optimize frontend CSS and remove horizontal margin from the list
