@@ -23,6 +23,9 @@ In order to be able to use the plugin, you have to get API credentials from Mail
 
 ## Changelog
 
+### 1.0.3
+* Remove horizontal margin from the unorderes list as well
+
 ### 1.0.2
 * Optimize frontend CSS and remove horizontal margin from the list
 
