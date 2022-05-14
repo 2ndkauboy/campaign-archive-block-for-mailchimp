@@ -14,6 +14,14 @@ Adds a block to show an archive for Mailchimp Campaigns.
 ## Description
 In order to be able to use the plugin, you have to get API credentials from Mailchimp. You can find them in the [API keys section](https://us1.admin.mailchimp.com/account/api/) of your Mailchimp account.
 
+This is not an official Mailchimp plugin. Mailchimp® is [a registered trademark](https://mailchimp.com/legal/copyright/) of The Rocket Science Group.
+
+## Frequently Asked Questions
+
+### I get an "API Error: You need to set up the API credentials in the settings!"
+
+In order to be able to use the plugin, you have to get API credentials from Mailchimp. You can find them in the [API keys section](https://us1.admin.mailchimp.com/account/api/) of your Mailchimp account. You can also find a guide on how to "[Generate your API key](https://mailchimp.com/developer/marketing/guides/quick-start/#generate-your-api-key)" in the Mailchimp Marketing API documentation.
+
 ## Changelog
 
 ### 1.0.0
