@@ -1,0 +1,15 @@
+*.lock
+composer.json
+composer.lock
+.distignore
+.editorconfig
+.eslintrc
+.git
+.gitattributes
+.github
+.gitignore
+node_modules
+package.json
+package-lock.json
+phpcs.xml
+.stylelintrc.json
