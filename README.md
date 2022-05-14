@@ -5,7 +5,6 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Requires at least: 5.0
 Tested up to: 5.9
 Requires PHP: 5.6
-Stable tag: 1.0.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -23,6 +22,9 @@ This is not an official Mailchimp plugin. Mailchimp® is [a registered trademark
 In order to be able to use the plugin, you have to get API credentials from Mailchimp. You can find them in the [API keys section](https://us1.admin.mailchimp.com/account/api/) of your Mailchimp account. You can also find a guide on how to "[Generate your API key](https://mailchimp.com/developer/marketing/guides/quick-start/#generate-your-api-key)" in the Mailchimp Marketing API documentation.
 
 ## Changelog
+
+### 1.0.1
+* Remove function loading the translations from the plugin folder
 
 ### 1.0.0
 * First stable version

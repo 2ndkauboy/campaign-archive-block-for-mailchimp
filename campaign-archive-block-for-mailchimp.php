@@ -10,7 +10,7 @@
  * Plugin Name: Campaign Archive Block for Mailchimp
  * Plugin URI: https://github.com/2ndkauboy/campaign-archive-block-for-mailchimp
  * Description: Adds a block to show an archive for Mailchimp Campaigns.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Bernhard Kau
  * Author URI: https://kau-boys.de
  * Text Domain: campaign-archive-block-for-mailchimp
@@ -18,7 +18,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
  */
 
-define( 'CABFM_VERSION', '1.0.0' );
+define( 'CABFM_VERSION', '1.0.1' );
 define( 'CABFM_FILE', __FILE__ );
 define( 'CABFM_PATH', plugin_dir_path( CABFM_FILE ) );
 define( 'CABFM_URL', plugin_dir_url( CABFM_FILE ) );
@@ -30,9 +30,6 @@ cabfm_pre_init();
  * Pre init function to check the plugins compatibility.
  */
 function cabfm_pre_init() {
-	// Load the translation, as they might be needed in pre_init.
-	add_action( 'plugins_loaded', 'cabfm_load_textdomain' );
-
 	// Check, if the min. required PHP version is available and if not, show an admin notice.
 	if ( version_compare( PHP_VERSION, '5.6', '<' ) ) {
 		add_action( 'admin_notices', 'cabfm_min_php_version_error' );
@@ -63,15 +60,6 @@ function cabfm_pre_init() {
 
 	// If all checks were successful, load the plugin.
 	require_once CABFM_PATH . 'lib/load.php';
-}
-
-/**
- * Load plugin textdomain.
- *
- * @since 1.0.0
- */
-function cabfm_load_textdomain() {
-	load_plugin_textdomain( 'campaign-archive-block-for-mailchimp', false, basename( dirname( __FILE__ ) ) . '/languages' );
 }
 
 /**
