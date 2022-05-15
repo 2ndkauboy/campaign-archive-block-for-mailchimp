@@ -24,7 +24,8 @@ In order to be able to use the plugin, you have to get API credentials from Mail
 
 ## Screenshots
 
-1. The block settings to adjust the number of items and fields to show in the list.
+1. The block in the editor with it's settings to adjust the number of items and fields to show in the list.
+2. The plugin's settings page for the API credentials for Mailchimp.
 
 ## Changelog
 
