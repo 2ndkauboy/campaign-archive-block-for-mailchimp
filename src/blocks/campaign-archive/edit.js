@@ -1,82 +1,89 @@
 /**
+ * Internal dependencies
+ */
+import Inspector from './inspector';
+
+/**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
+import apiFetch from '@wordpress/api-fetch';
+import { store as blockEditorStore } from '@wordpress/block-editor';
+import { compose } from '@wordpress/compose';
+import { useDispatch } from '@wordpress/data';
 import {
-	InspectorControls,
-	useBlockProps,
-} from '@wordpress/block-editor';
-import {
-	Disabled,
-	PanelBody,
-	RangeControl,
-	SelectControl,
-	ToggleControl,
+	Button,
+	Icon,
+	Placeholder,
+	ResizableBox,
+	TextControl,
+	withNotices,
 } from '@wordpress/components';
-import { __, _x } from '@wordpress/i18n';
+import { useEffect, useState } from '@wordpress/element';
+import { useBlockProps } from '@wordpress/block-editor';
+import { Disabled } from '@wordpress/components';
 import ServerSideRender from '@wordpress/server-side-render';
 
-const DEFAULT_MIN_ITEMS = 1;
-const DEFAULT_MAX_ITEMS = 100;
-
-export default function CampaignArchiveEdit( { attributes, setAttributes } ) {
+const Edit = ( props ) => {
+	const blockProps = useBlockProps();
 	const {
-		itemsToShow,
-		campaignTitle,
-		displaySender,
-		displayDate,
-		displayTime,
+		attributes,
+		setAttributes,
+	} = props;
+
+	const {
+		hasApiKey,
 	} = attributes;
 
-	function toggleAttribute( propName ) {
-		return () => {
-			const value = attributes[ propName ];
+	const [ apiKeyState, setApiKey ] = useState( '' );
 
-			setAttributes( { [ propName ]: ! value } );
-		};
-	}
+	const { __unstableMarkNextChangeAsNotPersistent } = useDispatch(
+		blockEditorStore
+	);
 
-	const blockProps = useBlockProps();
+	useEffect( () => {
+		apiFetch( { path: '/wp/v2/settings' } ).then( ( res ) => {
+			setApiKey( res.cabfm_api_key );
+		} );
+	}, [] );
+
+	useEffect( () => {
+		if ( !! apiKeyState && ! hasApiKey ) {
+			// This side-effect should not create an undo level.
+			__unstableMarkNextChangeAsNotPersistent();
+			setAttributes( { hasApiKey: true } );
+		}
+	}, [ apiKeyState, hasApiKey ] );
+
+	const updateApiKey = ( apiKey = apiKeyState ) => {
+		apiKey = apiKey.trim();
+
+		saveApiKey( apiKey );
+
+		if ( apiKey === '' ) {
+			setAttributes( { hasApiKey: false } );
+
+			return;
+		}
+	};
+
+	const saveApiKey = ( apiKey = apiKeyState ) => {
+		setApiKey( apiKey );
+
+		apiFetch( {
+			data: { cabfm_api_key: apiKey },
+			method: 'POST',
+			path: '/wp/v2/settings',
+		} );
+	};
 
 	return (
 		<>
-			<InspectorControls>
-				<PanelBody title={ __( 'Settings', 'campaign-archive-block-for-mailchimp' ) }>
-					<RangeControl
-						label={ __( 'Number of items', 'campaign-archive-block-for-mailchimp' ) }
-						value={ itemsToShow }
-						onChange={ ( value ) =>
-							setAttributes( { itemsToShow: value } )
-						}
-						min={ DEFAULT_MIN_ITEMS }
-						max={ DEFAULT_MAX_ITEMS }
-						required
-					/>
-					<SelectControl
-						label={ __( 'Campaign title', 'campaign-archive-block-for-mailchimp' ) }
-						value={ campaignTitle }
-						options={ [
-							{ label: _x( 'Subject', 'campaign-title', 'campaign-archive-block-for-mailchimp' ), value: 'subject' },
-							{ label: _x( 'Title', 'campaign-title', 'campaign-archive-block-for-mailchimp' ), value: 'title' },
-						] }
-						onChange={ newCampaignTitle => setAttributes( { campaignTitle: newCampaignTitle } ) }
-					/>
-					<ToggleControl
-						label={ __( 'Display sender', 'campaign-archive-block-for-mailchimp' ) }
-						checked={ displaySender }
-						onChange={ toggleAttribute( 'displaySender' ) }
-					/>
-					<ToggleControl
-						label={ __( 'Display date', 'campaign-archive-block-for-mailchimp' ) }
-						checked={ displayDate }
-						onChange={ toggleAttribute( 'displayDate' ) }
-					/>
-					{ displayDate && <ToggleControl
-						label={ __( 'Display time', 'campaign-archive-block-for-mailchimp' ) }
-						checked={ displayTime }
-						onChange={ toggleAttribute( 'displayTime' ) }
-					/> }
-				</PanelBody>
-			</InspectorControls>
+			<Inspector
+				{ ...props }
+				apiKey={ apiKeyState }
+				updateApiKeyCallBack={ updateApiKey }
+			/>
 			<div { ...blockProps }>
 				<Disabled>
 					<ServerSideRender
@@ -87,4 +94,6 @@ export default function CampaignArchiveEdit( { attributes, setAttributes } ) {
 			</div>
 		</>
 	);
-}
+};
+
+export default Edit;

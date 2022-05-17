@@ -19,7 +19,6 @@ class MailchimpApiCredentials {
 	public function init() {
 		add_action( 'admin_menu', [ $this, 'add_options_page' ] );
 		add_action( 'admin_init', [ $this, 'add_settings' ] );
-		add_filter( 'pre_update_option_cabfm_api_key', [ $this, 'validate_credentials' ], 10, 3 );
 	}
 
 	/**
@@ -128,58 +127,5 @@ class MailchimpApiCredentials {
 		?>
 		<input type="text" id="<?php echo esc_attr( $args['label_for'] ); ?>>" name="<?php echo esc_attr( $args['label_for'] ); ?>" value="<?php echo isset( $setting ) ? esc_attr( $setting ) : ''; ?>" class="regular-text">
 		<?php
-	}
-
-	/**
-	 * Validate if the credentials are correct, if not, return the old value so the update is skipped
-	 *
-	 * @param mixed  $value     The new, unserialized option value.
-	 * @param mixed  $old_value The old option value.
-	 * @param string $option    Option name.
-	 *
-	 * @return string
-	 */
-	public function validate_credentials( $value, $old_value, $option ) {
-		// Set the API credentials with the new values.
-		MailchimpAPI::$server_prefix = get_option( 'cabfm_server_prefix' );
-		MailchimpAPI::$api_key       = $value;
-
-		// Try to get a API response with those crendentials.
-		$request = MailchimpAPI::get( '/ping' );
-
-		if ( ! is_wp_error( $request ) ) {
-			$response_body = json_decode( wp_remote_retrieve_body( $request ), true );
-
-			if ( isset( $request['response']['code'] ) && 200 !== $request['response']['code'] ) {
-				if ( ( isset( $response_body['status'] ) && 401 === $response_body['status'] ) || ( isset( $response_body['title'] ) && 'API Key Invalid' === $response_body['title'] ) ) {
-					add_settings_error(
-						'cabfm',
-						esc_attr( 'settings_updated' ),
-						__( 'The credentials you have entered are wrong!', 'campaign-archive-block-for-mailchimp' )
-					);
-				} else {
-					add_settings_error(
-						'cabfm',
-						esc_attr( 'settings_updated' ),
-						__( 'There was an unknown error validating the credentials!', 'campaign-archive-block-for-mailchimp' )
-					);
-				}
-			} else {
-				add_settings_error(
-					'cabfm',
-					esc_attr( 'settings_updated' ),
-					__( 'The credentials you have entered have been validated and are correct!', 'campaign-archive-block-for-mailchimp' ),
-					'success'
-				);
-			}
-		} else {
-			add_settings_error(
-				'cabfm',
-				esc_attr( 'settings_updated' ),
-				__( 'There was a request error trying to validating the credentials!', 'campaign-archive-block-for-mailchimp' )
-			);
-		}
-
-		return $value;
 	}
 }

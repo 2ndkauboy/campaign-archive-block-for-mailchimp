@@ -41,6 +41,8 @@ class MailchimpAPI {
 	 */
 	public function init() {
 		add_action( 'init', [ $this, 'load' ] );
+		add_action( 'init', [ $this, 'register_settings' ] );
+		// add_filter( 'pre_update_option_cabfm_api_key', [ $this, 'validate_credentials' ], 10, 3 );
 	}
 
 	/**
@@ -50,8 +52,12 @@ class MailchimpAPI {
 	 * The URL can be changed on init before priority 10.
 	 */
 	public static function load() {
-		self::$server_prefix = get_option( 'cabfm_server_prefix' );
-		self::$api_key       = get_option( 'cabfm_api_key' );
+		self::$api_key = get_option( 'cabfm_api_key' );
+
+		// Split the API key, as it has the "Server Prefix" as a suffix.
+		$split_key = explode( '-', self::$api_key );
+		// Set the "Server Prefix" to the suffix of the split key, to the old option or to "us1" as a fallback.
+		self::$server_prefix = empty( $split_key[1] ) ? get_option( 'cabfm_server_prefix', 'us1' ) : $split_key[1];
 
 		/**
 		 * Filters the Mailchimp API base URL.
@@ -146,8 +152,16 @@ class MailchimpAPI {
 			];
 		}
 
+		// Sort the body arguments to get the same hash for the same values.
 		ksort( $args['body'] );
-		$hash = md5( wp_json_encode( $args['body'] ) );
+		// Create a hash object including the endpoint and API key.
+		$hash_object = [
+			'endpoint' => $endpoint,
+			'api_key'  => self::$api_key,
+			'body'     => $args['body'],
+		];
+		// Get the caching hash using the hash object.
+		$hash = md5( wp_json_encode( $hash_object ) );
 
 		$cache_key     = '_cabfm_api_request_' . $hash;
 		$response_body = get_transient( $cache_key );
@@ -175,5 +189,76 @@ class MailchimpAPI {
 		}
 
 		return $response_body;
+	}
+
+	/**
+	 * Register block settings.
+	 *
+	 * @access public
+	 */
+	public function register_settings() {
+		register_setting(
+			'cabfm_api_key',
+			'cabfm_api_key',
+			array(
+				'type'              => 'string',
+				'description'       => __( 'Mailchimp API Key for the Marketing API.', 'campaign-archive-block-for-mailchimp' ),
+				'sanitize_callback' => 'sanitize_text_field',
+				'show_in_rest'      => true,
+				'default'           => '',
+			)
+		);
+	}
+
+	/**
+	 * Validate if the credentials are correct, if not, return the old value so the update is skipped
+	 *
+	 * @param mixed  $value     The new, unserialized option value.
+	 * @param mixed  $old_value The old option value.
+	 * @param string $option    Option name.
+	 *
+	 * @return string
+	 */
+	public function validate_credentials( $value, $old_value, $option ) {
+		// Set the API credentials with the new values.
+		self::$api_key = $value;
+
+		// Try to get a API response with those crendentials.
+		$request = self::get( '/ping' );
+
+		if ( ! is_wp_error( $request ) ) {
+			$response_body = json_decode( wp_remote_retrieve_body( $request ), true );
+
+			if ( isset( $request['response']['code'] ) && 200 !== $request['response']['code'] ) {
+				if ( ( isset( $response_body['status'] ) && 401 === $response_body['status'] ) || ( isset( $response_body['title'] ) && 'API Key Invalid' === $response_body['title'] ) ) {
+					add_settings_error(
+						'cabfm',
+						esc_attr( 'settings_updated' ),
+						__( 'The credentials you have entered are wrong!', 'campaign-archive-block-for-mailchimp' )
+					);
+				} else {
+					add_settings_error(
+						'cabfm',
+						esc_attr( 'settings_updated' ),
+						__( 'There was an unknown error validating the credentials!', 'campaign-archive-block-for-mailchimp' )
+					);
+				}
+			} else {
+				add_settings_error(
+					'cabfm',
+					esc_attr( 'settings_updated' ),
+					__( 'The credentials you have entered have been validated and are correct!', 'campaign-archive-block-for-mailchimp' ),
+					'success'
+				);
+			}
+		} else {
+			add_settings_error(
+				'cabfm',
+				esc_attr( 'settings_updated' ),
+				__( 'There was a request error trying to validating the credentials!', 'campaign-archive-block-for-mailchimp' )
+			);
+		}
+
+		return $value;
 	}
 }
