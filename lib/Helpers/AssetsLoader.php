@@ -100,7 +100,8 @@ class AssetsLoader {
 			);
 		}
 
-		wp_set_script_translations( 'campaign-archive-block-for-mailchimp-editor', 'campaign-archive-block-for-mailchimp', plugin_dir_path( CABFM_FILE ) . 'languages' );
+		wp_set_script_translations( 'campaign-archive-block-for-mailchimp', 'campaign-archive-block-for-mailchimp' );
+		wp_set_script_translations( 'campaign-archive-block-for-mailchimp-editor', 'campaign-archive-block-for-mailchimp' );
 	}
 
 	/**
