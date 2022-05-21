@@ -6,6 +6,7 @@ import Inspector from './inspector';
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 import { Disabled } from '@wordpress/components';
 import { useState } from '@wordpress/element';
@@ -17,7 +18,7 @@ const Edit = ( props ) => {
 		attributes,
 	} = props;
 
-	const [ apiKeyObject, setApiKeyObject ] = useState( { key: '', valid: false, message: '' } );
+	const [ apiKeyObject, setApiKeyObject ] = useState( { key: '', valid: false, message: '', account_name: '' } );
 
 	return (
 		<>
@@ -28,11 +29,20 @@ const Edit = ( props ) => {
 			/>
 			<div { ...blockProps }>
 				<Disabled>
-					<ServerSideRender
-						block="cabfm/campaign-archive"
-						attributes={ attributes }
-						apiKeyObject={ apiKeyObject }
-					/>
+					{ apiKeyObject.valid &&
+						<ServerSideRender
+							block="cabfm/campaign-archive"
+							attributes={ attributes }
+							apiKeyObject={ apiKeyObject }
+						/>
+					}
+					{ ! apiKeyObject.valid &&
+						<div className="components-placeholder">
+							<div className="notice notice-warning">
+								{ __( 'To use the Campaign Archive block on your site, you have to provide credentials for the Mailchimp API in the block settings.', 'campaign-archive-block-for-mailchimp' ) }
+							</div>
+						</div>
+					}
 				</Disabled>
 			</div>
 		</>

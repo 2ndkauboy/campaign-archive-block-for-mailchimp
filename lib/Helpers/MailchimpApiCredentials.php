@@ -62,6 +62,17 @@ class MailchimpApiCredentials {
 				'default'           => '',
 			]
 		);
+		register_setting(
+			'cabfm_api_credentials_account_name',
+			'cabfm_api_credentials_account_name',
+			[
+				'type'              => 'string',
+				'description'       => __( 'The account name connected to the API key.', 'campaign-archive-block-for-mailchimp' ),
+				'sanitize_callback' => 'sanitize_text_field',
+				'show_in_rest'      => true,
+				'default'           => '',
+			]
+		);
 	}
 
 	/**
@@ -105,6 +116,8 @@ class MailchimpApiCredentials {
 			delete_option( 'cabfm_api_key' );
 			delete_option( 'cabfm_api_credentials_validation_result' );
 			delete_option( 'cabfm_api_credentials_validation_message' );
+			delete_option( 'cabfm_api_credentials_account_name' );
+
 			return;
 		}
 
@@ -117,7 +130,9 @@ class MailchimpApiCredentials {
 		}
 
 		// Try to get a API response with those crendentials.
-		$validation_request = MailchimpAPI::get( '/ping' );
+		$validation_request = MailchimpAPI::get( '/' );
+
+		$account_name = '';
 
 		if ( ! is_wp_error( $validation_request ) ) {
 			$response_body = json_decode( wp_remote_retrieve_body( $validation_request ), true );
@@ -133,6 +148,7 @@ class MailchimpApiCredentials {
 			} else {
 				$validation_result  = true;
 				$validation_message = __( 'The credentials you have entered have been validated and are correct!', 'campaign-archive-block-for-mailchimp' );
+				$account_name       = $response_body['account_name'];
 			}
 		} else {
 			$validation_result  = false;
@@ -141,6 +157,10 @@ class MailchimpApiCredentials {
 
 		update_option( 'cabfm_api_credentials_validation_result', $validation_result );
 		update_option( 'cabfm_api_credentials_validation_message', $validation_message );
+
+		if ( ! empty( $account_name ) ) {
+			update_option( 'cabfm_api_credentials_account_name', $account_name );
+		}
 
 		return $value;
 	}

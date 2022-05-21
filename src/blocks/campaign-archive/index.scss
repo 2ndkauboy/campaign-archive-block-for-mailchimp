@@ -1,3 +1,12 @@
+.cabfm-credentials-status,
+.cabfm-credentials-validation-error {
+	margin-bottom: 24px;
+
+	> .components-notice {
+		margin: 0;
+	}
+}
+
 .wp-block-cabfm-campaign-archive li a > div {
 	display: inline;
 }

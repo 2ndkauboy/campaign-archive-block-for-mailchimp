@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { __, _x } from '@wordpress/i18n';
+import { __, _x, sprintf } from '@wordpress/i18n';
 import { ENTER } from '@wordpress/keycodes';
 import { InspectorControls } from '@wordpress/block-editor';
 import { Button, ExternalLink, PanelBody, RangeControl, SelectControl, TextControl, ToggleControl } from '@wordpress/components';
@@ -46,6 +46,7 @@ const Inspector = ( props ) => {
 				key: res.cabfm_api_key,
 				valid: res.cabfm_api_credentials_validation_result,
 				message: res.cabfm_api_credentials_validation_message,
+				account_name: res.cabfm_api_credentials_account_name,
 			} );
 		} );
 	}, [] );
@@ -64,6 +65,7 @@ const Inspector = ( props ) => {
 				key: res.cabfm_api_key,
 				valid: res.cabfm_api_credentials_validation_result,
 				message: res.cabfm_api_credentials_validation_message,
+				account_name: res.cabfm_api_credentials_account_name,
 			} );
 		} );
 	};
@@ -75,13 +77,9 @@ const Inspector = ( props ) => {
 	return (
 		<>
 			<InspectorControls>
-				<div>apiKeyObject.key: { apiKeyObject.key }</div>
-				<div>apiKeyObject.valid: { apiKeyObject.valid }</div>
-				<div>apiKeyObject.message: { apiKeyObject.message }</div>
-				<div>apiKeyInspectorState: { apiKeyInspectorState }</div>
-				{/*{ !! apiKey &&*/}
+				{ apiKeyObject.valid &&
 					<PanelBody
-						initialOpen={ !! apiKeyInspectorState }
+						initialOpen={ apiKeyObject.valid }
 						title={ __( 'Settings', 'campaign-archive-block-for-mailchimp' ) }>
 						<RangeControl
 							label={ __( 'Number of items', 'campaign-archive-block-for-mailchimp' ) }
@@ -118,49 +116,76 @@ const Inspector = ( props ) => {
 							onChange={ () => setAttributes( { displayTime: ! displayTime } ) }
 						/> }
 					</PanelBody>
-				{/*}*/}
+				}
 				<PanelBody
-					// initialOpen={ ! apiKeyObject.key }
 					title={ __( 'Mailchimp API key', 'campaign-archive-block-for-mailchimp' ) }
 				>
-					<p>{ __( 'To use the Campaign Archive block on your site, you have to provide credentials for the Mailchimp API in the settings below.', 'campaign-archive-block-for-mailchimp' ) }</p>
-					{/*{ '' === apiKey &&*/ }
-					<>
-						<p>
-							<ExternalLink href={ GET_KEY_URL }>{ __( 'Get a key', 'campaign-archive-block-for-mailchimp' ) }</ExternalLink>|&nbsp;
-							<ExternalLink href={ HELP_URL }>{ __( 'Need help?', 'campaign-archive-block-for-mailchimp' ) }</ExternalLink>
-						</p>
-						<TextControl
-							onChange={ ( value ) => setApiKeyInspectorState( value ) }
-							onKeyDown={ ( { keyCode } ) => handleKeyDown( keyCode ) }
-							placeholder={ __( 'Add Mailchimp API key…', 'campaign-archive-block-for-mailchimp' ) }
-							value={ apiKeyInspectorState }
-						/>
-						{ '' !== apiKeyObject.message && ! apiKeyObject.valid &&
-							<div>{ apiKeyObject.message }</div>
-						}
-						<Button
-							disabled={ ( '' === apiKeyInspectorState ) }
-							isPrimary
-							onClick={ updateApiKey }
-						>
-							{ __( 'Save', 'campaign-archive-block-for-mailchimp' ) }
-						</Button>
-					</>
-					{/*}*/ }
-					{/*{ '' !== apiKeyObject.key &&*/ }
-					<>
-						<div>{ apiKeyObject.key }</div>
-						<Button
-							className="components-block-coblocks-map-api-key-remove__button"
-							disabled={ ! apiKeyObject.key }
-							isSecondary
-							onClick={ removeApiKey }
-						>
-							{ __( 'Remove', 'campaign-archive-block-for-mailchimp' ) }
-						</Button>
-					</>
-					{/*}*/ }
+					{ ! apiKeyObject.valid &&
+						<>
+							<p>{ __( 'To use the Campaign Archive block on your site, you have to provide credentials for the Mailchimp API in the settings below.', 'campaign-archive-block-for-mailchimp' ) }</p>
+							<p>
+								<ExternalLink href={ GET_KEY_URL }>{ __( 'Get an API key', 'campaign-archive-block-for-mailchimp' ) }</ExternalLink>&nbsp;|&nbsp;
+								<ExternalLink href={ HELP_URL }>{ __( 'How to get a key?', 'campaign-archive-block-for-mailchimp' ) }</ExternalLink>
+							</p>
+							<TextControl
+								label={ __( 'Mailchimp API key', 'campaign-archive-block-for-mailchimp' ) }
+								hideLabelFromVision="true"
+								placeholder={ __( 'Add Mailchimp API key…', 'campaign-archive-block-for-mailchimp' ) }
+								onChange={ ( value ) => setApiKeyInspectorState( value ) }
+								onKeyDown={ ( { keyCode } ) => handleKeyDown( keyCode ) }
+								value={ apiKeyInspectorState }
+							/>
+							{ '' !== apiKeyObject.message && ! apiKeyObject.valid &&
+								<div className="cabfm-credentials-validation-error">
+									<div className="components-notice is-error">
+										<div className="components-notice__content">
+											{
+												sprintf(
+													// translators: the API error message.
+													__( 'There was an error connecting to your Mailchimp account: %s', 'campaign-archive-block-for-mailchimp' ),
+													apiKeyObject.message
+												)
+											}
+										</div>
+									</div>
+								</div>
+							}
+							<Button
+								disabled={ ( '' === apiKeyInspectorState ) }
+								isPrimary
+								onClick={ updateApiKey }
+							>
+								{ __( 'Save', 'campaign-archive-block-for-mailchimp' ) }
+							</Button>
+						</>
+					}
+					{ apiKeyObject.valid &&
+						<>
+							<div className="cabfm-credentials-status">
+								<div className="components-notice is-success">
+									<div className="components-notice__content">
+										{ __( 'You have been successfully connected to a Mailchimp account:', 'campaign-archive-block-for-mailchimp' ) }
+									</div>
+								</div>
+							</div>
+							<p className="cabfm-acount-name-current">
+								<b>{ __( 'Account:', 'campaign-archive-block-for-mailchimp' ) }</b><br/>
+								{ apiKeyObject.account_name }
+							</p>
+							<p className="cabfm-api-key-current">
+								<b>{ __( 'API key:', 'campaign-archive-block-for-mailchimp' ) }</b><br/>
+								{ apiKeyObject.key }
+							</p>
+							<Button
+								className="components-button is-destructive"
+								disabled={ ! apiKeyObject.key }
+								isSecondary
+								onClick={ removeApiKey }
+							>
+								{ __( 'Remove API key', 'campaign-archive-block-for-mailchimp' ) }
+							</Button>
+						</>
+					}
 				</PanelBody>
 			</InspectorControls>
 		</>
