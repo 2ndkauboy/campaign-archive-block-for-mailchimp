@@ -21,6 +21,7 @@ class MailchimpApiCredentials {
 	 */
 	public function init() {
 		add_action( 'init', [ $this, 'register_settings' ] );
+		add_filter( 'rest_request_before_callbacks', [ $this, 'check_api_credentials_information_missing' ], 10, 3 );
 		add_filter( 'rest_request_after_callbacks', [ $this, 'obfuscate_api_key' ], 10, 3 );
 		add_filter( 'pre_update_option_cabfm_api_key', [ $this, 'validate_credentials' ], 10, 3 );
 	}
@@ -97,6 +98,36 @@ class MailchimpApiCredentials {
 			// Overwrite the API key in the repsonse.
 			$response['cabfm_api_key'] = implode( '-', $api_key_parts );
 		}
+
+		return $response;
+	}
+
+	/**
+	 * Then the response result is checked, but it does not exists, validate the API key to fill the other values.
+	 *
+	 * @param WP_REST_Response|WP_HTTP_Response|WP_Error|mixed $response Result to send to the client. Usually a WP_REST_Response or WP_Error.
+	 * @param array                                            $handler  Route handler used for the request.
+	 * @param WP_REST_Request                                  $request  Request used to generate the response.
+	 *
+	 * @return mixed
+	 */
+	public function check_api_credentials_information_missing( $response, $handler, $request ) {
+		if ( '/wp/v2/settings' !== $request->get_route() ) {
+			return $response;
+		}
+
+		// If there is a validation result, credentials have been requested before.
+		$validation_result = get_option( 'cabfm_api_credentials_validation_result' );
+		if ( $validation_result ) {
+			return $response;
+		}
+
+		$current_api_key = get_option( 'cabfm_api_key' );
+		if ( ! $current_api_key ) {
+			return $response;
+		}
+		// Pass an empty "old_value" to force a check of the credentials.
+		$this->validate_credentials( $current_api_key, '', 'cabfm_api_key' );
 
 		return $response;
 	}

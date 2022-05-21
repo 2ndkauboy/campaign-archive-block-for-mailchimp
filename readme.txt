@@ -29,6 +29,9 @@ In order to be able to use the plugin, you have to get API credentials from Mail
 
 == Changelog ==
 
+=== 2.0.1 ===
+* Migrate previously entered API keys into new block settings
+
 === 2.0.0 ===
 * Remove the settings page and use the block settings for the API key
 * Prepare the block to be listed in the block directrory
