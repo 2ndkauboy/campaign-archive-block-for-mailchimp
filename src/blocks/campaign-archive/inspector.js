@@ -6,6 +6,7 @@ import { ENTER } from '@wordpress/keycodes';
 import { InspectorControls } from '@wordpress/block-editor';
 import { Button, ExternalLink, PanelBody, RangeControl, SelectControl, TextControl, ToggleControl } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
+import apiFetch from '@wordpress/api-fetch';
 
 const GET_KEY_URL = 'https://us1.admin.mailchimp.com/account/api/';
 const HELP_URL = 'https://mailchimp.com/en/help/about-api-keys/';
@@ -17,9 +18,10 @@ const Inspector = ( props ) => {
 	const {
 		attributes,
 		setAttributes,
-		apiKey,
-		updateApiKeyCallBack,
+		apiKeyObject,
+		setApiKeyObject,
 	} = props;
+
 	const {
 		itemsToShow,
 		campaignTitle,
@@ -28,15 +30,7 @@ const Inspector = ( props ) => {
 		displayTime,
 	} = attributes;
 
-	const [ apiKeyState, setApiKey ] = useState( apiKey );
-
-	useEffect( () => {
-		setApiKey( apiKey );
-	}, [] );
-
-	const updateApiKey = () => {
-		updateApiKeyCallBack( apiKeyState );
-	};
+	const [ apiKeyInspectorState, setApiKeyInspectorState ] = useState( apiKeyObject.key );
 
 	const handleKeyDown = ( keyCode ) => {
 		if ( keyCode !== ENTER ) {
@@ -46,12 +40,48 @@ const Inspector = ( props ) => {
 		updateApiKey();
 	};
 
+	useEffect( () => {
+		apiFetch( { path: '/wp/v2/settings' } ).then( ( res ) => {
+			setApiKeyObject( {
+				key: res.cabfm_api_key,
+				valid: res.cabfm_api_credentials_validation_result,
+				message: res.cabfm_api_credentials_validation_message,
+			} );
+		} );
+	}, [] );
+
+	const updateApiKey = () => {
+		saveApiKey( apiKeyInspectorState.trim() );
+	};
+
+	const saveApiKey = ( apiKeyValue ) => {
+		apiFetch( {
+			data: { cabfm_api_key: apiKeyValue },
+			method: 'POST',
+			path: '/wp/v2/settings',
+		} ).then( ( res ) => {
+			setApiKeyObject( {
+				key: res.cabfm_api_key,
+				valid: res.cabfm_api_credentials_validation_result,
+				message: res.cabfm_api_credentials_validation_message,
+			} );
+		} );
+	};
+
+	const removeApiKey = () => {
+		saveApiKey( '' );
+	};
+
 	return (
 		<>
 			<InspectorControls>
-				{ !! apiKey &&
+				<div>apiKeyObject.key: { apiKeyObject.key }</div>
+				<div>apiKeyObject.valid: { apiKeyObject.valid }</div>
+				<div>apiKeyObject.message: { apiKeyObject.message }</div>
+				<div>apiKeyInspectorState: { apiKeyInspectorState }</div>
+				{/*{ !! apiKey &&*/}
 					<PanelBody
-						initialOpen={ !! apiKey }
+						initialOpen={ !! apiKeyInspectorState }
 						title={ __( 'Settings', 'campaign-archive-block-for-mailchimp' ) }>
 						<RangeControl
 							label={ __( 'Number of items', 'campaign-archive-block-for-mailchimp' ) }
@@ -88,31 +118,49 @@ const Inspector = ( props ) => {
 							onChange={ () => setAttributes( { displayTime: ! displayTime } ) }
 						/> }
 					</PanelBody>
-				}
+				{/*}*/}
 				<PanelBody
-					initialOpen={ ! apiKey }
+					// initialOpen={ ! apiKeyObject.key }
 					title={ __( 'Mailchimp API key', 'campaign-archive-block-for-mailchimp' ) }
 				>
 					<p>{ __( 'To use the Campaign Archive block on your site, you have to provide credentials for the Mailchimp API in the settings below.', 'campaign-archive-block-for-mailchimp' ) }</p>
-					{ apiKey === '' &&
+					{/*{ '' === apiKey &&*/ }
+					<>
 						<p>
 							<ExternalLink href={ GET_KEY_URL }>{ __( 'Get a key', 'campaign-archive-block-for-mailchimp' ) }</ExternalLink>|&nbsp;
 							<ExternalLink href={ HELP_URL }>{ __( 'Need help?', 'campaign-archive-block-for-mailchimp' ) }</ExternalLink>
 						</p>
-					}
-					<TextControl
-						onChange={ ( value ) => setApiKey( value ) }
-						onKeyDown={ ( { keyCode } ) => handleKeyDown( keyCode ) }
-						placeholder={ __( 'Add Mailchimp API key…', 'campaign-archive-block-for-mailchimp' ) }
-						value={ apiKeyState }
-					/>
-					<Button
-						disabled={ ( apiKeyState === '' ) || ( apiKeyState === apiKey ) }
-						isPrimary
-						onClick={ updateApiKey }
-					>
-						{ ( apiKeyState === apiKey && apiKey !== '' ) ? __( 'Saved', 'campaign-archive-block-for-mailchimp' ) : __( 'Save', 'campaign-archive-block-for-mailchimp' ) }
-					</Button>
+						<TextControl
+							onChange={ ( value ) => setApiKeyInspectorState( value ) }
+							onKeyDown={ ( { keyCode } ) => handleKeyDown( keyCode ) }
+							placeholder={ __( 'Add Mailchimp API key…', 'campaign-archive-block-for-mailchimp' ) }
+							value={ apiKeyInspectorState }
+						/>
+						{ '' !== apiKeyObject.message && ! apiKeyObject.valid &&
+							<div>{ apiKeyObject.message }</div>
+						}
+						<Button
+							disabled={ ( '' === apiKeyInspectorState ) }
+							isPrimary
+							onClick={ updateApiKey }
+						>
+							{ __( 'Save', 'campaign-archive-block-for-mailchimp' ) }
+						</Button>
+					</>
+					{/*}*/ }
+					{/*{ '' !== apiKeyObject.key &&*/ }
+					<>
+						<div>{ apiKeyObject.key }</div>
+						<Button
+							className="components-block-coblocks-map-api-key-remove__button"
+							disabled={ ! apiKeyObject.key }
+							isSecondary
+							onClick={ removeApiKey }
+						>
+							{ __( 'Remove', 'campaign-archive-block-for-mailchimp' ) }
+						</Button>
+					</>
+					{/*}*/ }
 				</PanelBody>
 			</InspectorControls>
 		</>
