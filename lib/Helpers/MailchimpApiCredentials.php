@@ -122,7 +122,22 @@ class MailchimpApiCredentials {
 			return $response;
 		}
 
+		// Check for the API key stored in the plugin's own option.
 		$current_api_key = get_option( 'cabfm_api_key' );
+
+		// If there was no current key from the plugin itself, try to get it from the "MailChimp" plugin.
+		if ( empty( $current_api_key ) ) {
+			$current_api_key = get_option( 'mc_api_key' );
+		}
+
+		// If we still haven't found an API key, try to get it from the "Mailchimp for WooCommerce" plugin.
+		if ( empty( $current_api_key ) ) {
+			$mailchimp_woocommerce_options = get_option( 'mailchimp-woocommerce' );
+			if ( isset( $mailchimp_woocommerce_options['mailchimp_api_key'] ) ) {
+				$current_api_key = $mailchimp_woocommerce_options['mailchimp_api_key'];
+			}
+		}
+
 		if ( ! $current_api_key ) {
 			return $response;
 		}
