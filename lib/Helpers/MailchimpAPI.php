@@ -192,7 +192,15 @@ class MailchimpAPI {
 				$response_body = json_decode( wp_remote_retrieve_body( $request ), true );
 			}
 
-			set_transient( $cache_key, $response_body, 12 * HOUR_IN_SECONDS );
+			/**
+			 * Filters the cache duration defined in minutes.
+			 *
+			 * @param int $cache_duration The current cache duration. Default is 60 minutes.
+			 *
+			 * @return int
+			 */
+			$cache_duration = apply_filters( 'cabfm_cache_minutes', 60 );
+			set_transient( $cache_key, $response_body, $cache_duration * MINUTE_IN_SECONDS );
 		}
 
 		return $response_body;
