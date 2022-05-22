@@ -21,9 +21,9 @@ class MailchimpApiCredentials {
 	 */
 	public function init() {
 		add_action( 'init', [ $this, 'register_settings' ] );
+		add_action( 'update_option_cabfm_api_key', [ $this, 'update_api_key' ], 10, 3 );
 		add_filter( 'rest_request_before_callbacks', [ $this, 'check_api_credentials_information_missing' ], 10, 3 );
 		add_filter( 'rest_request_after_callbacks', [ $this, 'obfuscate_api_key' ], 10, 3 );
-		add_filter( 'pre_update_option_cabfm_api_key', [ $this, 'validate_credentials' ], 10, 3 );
 	}
 
 	/**
@@ -141,8 +141,9 @@ class MailchimpApiCredentials {
 		if ( ! $current_api_key ) {
 			return $response;
 		}
-		// Pass an empty "old_value" to force a check of the credentials.
-		$this->validate_credentials( $current_api_key, '', 'cabfm_api_key' );
+
+		// Validate the credentials, this will set the other options as well.
+		$this->validate_credentials( $current_api_key );
 
 		return $response;
 	}
@@ -150,13 +151,13 @@ class MailchimpApiCredentials {
 	/**
 	 * Validate if the credentials are correct, if not, return the old value so the update is skipped
 	 *
-	 * @param mixed  $value     The new, unserialized option value.
 	 * @param mixed  $old_value The old option value.
+	 * @param mixed  $value     The new option value.
 	 * @param string $option    Option name.
 	 *
 	 * @return string
 	 */
-	public function validate_credentials( $value, $old_value, $option ) {
+	public function update_api_key( $old_value, $value, $option ) {
 		// Remove options if API key is empty.
 		if ( empty( $value ) ) {
 			delete_option( 'cabfm_api_key' );
@@ -167,13 +168,23 @@ class MailchimpApiCredentials {
 			return;
 		}
 
-		// Overwrite the API key with the newly submitted value.
-		MailchimpAPI::set_api_key( $value );
-
 		// If the API key has not changed don't request it again.
 		if ( $value === $old_value ) {
 			return $value;
 		}
+
+		// Validate the credentials, this will set the other options as well.
+		$this->validate_credentials( $value );
+	}
+
+	/**
+	 * Validate if the credentials are correct, if not, return the old value so the update is skipped
+	 *
+	 * @param string $api_key The API key to validate.
+	 */
+	public function validate_credentials( $api_key ) {
+		// Overwrite the API key with the newly submitted value.
+		MailchimpAPI::set_api_key( $api_key );
 
 		// Try to get a API response with those crendentials.
 		$validation_request = MailchimpAPI::get( '/' );
@@ -201,14 +212,13 @@ class MailchimpApiCredentials {
 			$validation_message = __( 'There was a request error trying to validating the credentials!', 'campaign-archive-block-for-mailchimp' );
 		}
 
+		update_option( 'cabfm_api_key', $api_key );
 		update_option( 'cabfm_api_credentials_validation_result', $validation_result );
 		update_option( 'cabfm_api_credentials_validation_message', $validation_message );
 
 		if ( ! empty( $account_name ) ) {
 			update_option( 'cabfm_api_credentials_account_name', $account_name );
 		}
-
-		return $value;
 	}
 
 }
