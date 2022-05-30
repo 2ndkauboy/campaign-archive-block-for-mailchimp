@@ -35,6 +35,14 @@ class CampaignArchive {
 			'sort_dir'   => 'DESC',
 		];
 
+		/**
+		 * Filters query arguments used to get the campaigns.
+		 *
+		 * @param string $query_args The query arguments for the API call.
+		 * @param string $attributes The block attributes.
+		 */
+		$query_args = apply_filters( 'cabfm_campaigns_query_args', $query_args, $attributes );
+
 		$args = [
 			'method' => 'GET',
 			'body'   => $query_args,
@@ -121,7 +129,7 @@ class CampaignArchive {
 		 * @param string $campaigns       The queried Mailchimp campaigns.
 		 * @param string $attributes      The block attributes.
 		 */
-		return apply_filters( 'cabfm_helper_api_base', $campaign_markup, $campaigns, $attributes );
+		return apply_filters( 'cabfm_campaigns_markup', $campaign_markup, $campaigns, $attributes );
 	}
 
 	/**

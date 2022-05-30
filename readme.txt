@@ -39,6 +39,9 @@ For better front end performance the campaign archive ist cached for 60 minutes.
 
 == Changelog ==
 
+= 2.2.0 =
+* Adding the two filters `cabfm_campaigns_query_args` and `cabfm_campaigns_markup` to enable changes on the queried or rendered campaigns.
+
 = 2.1.0 =
 * If one of the plugins "Mailchimp" or "Mailchimp for WooComemrce" already has an API key, use this for the plugin as well
 * Reduce caching duration to 60 minutes and add the `cabfm_cache_minutes` filter to change this value
