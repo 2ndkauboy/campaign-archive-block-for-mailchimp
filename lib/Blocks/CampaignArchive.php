@@ -2,7 +2,7 @@
 /**
  * Server-side rendering of the `cabfm/campaign-archive` block.
  *
- * @package WordPress
+ * @package CABFM\Blocks
  */
 
 namespace CABFM\Blocks;
@@ -18,6 +18,18 @@ class CampaignArchive {
 	 */
 	public function init() {
 		add_action( 'init', [ $this, 'register_block' ] );
+	}
+
+	/**
+	 * Registers the `cabfm/campaign-archive` block on server.
+	 */
+	public function register_block() {
+		register_block_type_from_metadata(
+			CABFM_PATH . '/src/blocks/campaign-archive',
+			[
+				'render_callback' => [ $this, 'render_block' ],
+			]
+		);
 	}
 
 	/**
@@ -130,17 +142,5 @@ class CampaignArchive {
 		 * @param string $attributes      The block attributes.
 		 */
 		return apply_filters( 'cabfm_campaigns_markup', $campaign_markup, $campaigns, $attributes );
-	}
-
-	/**
-	 * Registers the `cabfm/campaign-archive` block on server.
-	 */
-	public function register_block() {
-		register_block_type_from_metadata(
-			CABFM_PATH . '/src/blocks/campaign-archive',
-			[
-				'render_callback' => [ $this, 'render_block' ],
-			]
-		);
 	}
 }
