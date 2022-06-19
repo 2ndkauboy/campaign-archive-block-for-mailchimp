@@ -11,6 +11,7 @@ use CABFM\Blocks\CampaignArchive;
 use CABFM\Helpers\AssetsLoader;
 use CABFM\Helpers\MailchimpAPI;
 use CABFM\Helpers\MailchimpApiCredentials;
+use CABFM\REST\CampaignFolders;
 
 /**
  * Init function of the plugin
@@ -22,6 +23,7 @@ function init() {
 		'helpers_assets_loader'             => new AssetsLoader(),
 		'helpers_mailchimp_api'             => new MailchimpAPI(),
 		'helpers_mailchimp_api_credentials' => new MailchimpApiCredentials(),
+		'rest_campaign_folders'             => new CampaignFolders(),
 	];
 
 	// Initialize all modules.
