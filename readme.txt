@@ -3,13 +3,13 @@
 Contributors: Kau-Boy
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7914504
 Requires at least: 5.0
-Tested up to: 6.2
+Tested up to: 6.3
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 Tags: blocks, campaign, archive, mailchimp, block
 
-Adds a block to show an archive for Mailchimp Campaigns.
+Adds a block to show an archive for Mailchimp campaigns.
 
 == Description ==
 In order to be able to use the plugin, you have to get API credentials from Mailchimp. You can find them in the [API keys section](https://us1.admin.mailchimp.com/account/api/) of your Mailchimp account. If you already use the plugin "Mailchimp" or "Mailchimp for WooCommence", the API key from these will automatically be used.
@@ -34,7 +34,7 @@ For better front end performance the campaign archive ist cached for 60 minutes.
 
 == Screenshots ==
 
-1. The block in the editor with it's settings to adjust the output of the block and the API key settings
+1. The block in the editor with its settings to adjust the output of the block and the API key settings
 2. The block before setting up the API key
 
 == Changelog ==
