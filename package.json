@@ -24,9 +24,11 @@
 		"postpackages-update": "npm run build",
 		"start": "wp-scripts start",
 		"test:e2e": "wp-scripts test-e2e",
-		"test:unit": "wp-scripts test-unit-js"
+		"test:unit": "wp-scripts test-unit-js",
+		"wp-env": "wp-env"
 	},
 	"devDependencies": {
+		"@wordpress/env": "^8.11.0",
 		"@wordpress/eslint-plugin": "^17.2.0",
 		"@wordpress/scripts": "^26.16.0"
 	}
