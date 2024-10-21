@@ -11,6 +11,10 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
+      - name: Set ENV variables
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -32,11 +36,11 @@ jobs:
 
       - name: Build plugin
         run: |
-          wp dist-archive . ./campaign-archive-block-for-mailchimp.zip
+          wp dist-archive . ./$REPO_NAME.zip
           mkdir tmp-build
-          unzip campaign-archive-block-for-mailchimp.zip -d tmp-build
+          unzip $REPO_NAME.zip -d tmp-build
 
       - name: Run plugin check
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: "./tmp-build/campaign-archive-block-for-mailchimp"
+          build-dir: ./tmp-build/$REPO_NAME
