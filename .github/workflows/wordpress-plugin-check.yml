@@ -32,11 +32,11 @@ jobs:
 
       - name: Build plugin
         run: |
-          wp dist-archive . /tmp/plugin.tar.gz --format=targz
-          mkdir /tmp/tmp-build
-          tar --extract --file=/tmp/plugin.tar.gz --strip-components=1 --directory=/tmp/tmp-build
+          wp dist-archive . ./$GITHUB_REPOSITORY.zip
+          mkdir $GITHUB_REPOSITORY_OWNER
+          unzip $GITHUB_REPOSITORY.zip -d $GITHUB_REPOSITORY_OWNER
 
       - name: Run plugin check
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: './tmp-build/'
+          build-dir: "./$GITHUB_REPOSITORY"
