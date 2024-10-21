@@ -49,6 +49,7 @@ const Inspector = ( props ) => {
 				account_name: res.cabfm_api_credentials_account_name,
 			} );
 		} );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	const updateApiKey = () => {

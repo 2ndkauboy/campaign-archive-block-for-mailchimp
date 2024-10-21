@@ -151,13 +151,15 @@ class MailchimpApiCredentials {
 	/**
 	 * Validate if the credentials are correct, if not, return the old value so the update is skipped
 	 *
+	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	 *
 	 * @param mixed  $old_value The old option value.
 	 * @param mixed  $value     The new option value.
 	 * @param string $option    Option name.
 	 *
 	 * @return string
 	 */
-	public function update_api_key( $old_value, $value, $option ) {
+	public function update_api_key( $old_value, $value, $option  ) {
 		// Remove options if API key is empty.
 		if ( empty( $value ) ) {
 			delete_option( 'cabfm_api_key' );
@@ -220,5 +222,4 @@ class MailchimpApiCredentials {
 			update_option( 'cabfm_api_credentials_account_name', $account_name );
 		}
 	}
-
 }

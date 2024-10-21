@@ -27,10 +27,6 @@
 		"test:unit": "wp-scripts test-unit-js"
 	},
 	"devDependencies": {
-		"@wordpress/eslint-plugin": "^12.1.0",
-		"@wordpress/scripts": "^22.5.0"
-	},
-	"dependencies": {
-		"extract-zip": "^2.0.1"
+		"@wordpress/scripts": "^30.3.0"
 	}
 }
