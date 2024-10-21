@@ -32,9 +32,9 @@ jobs:
 
       - name: Build plugin
         run: |
-          wp dist-archive . ../plugin.tar.gz --format=targz
-          mkdir ../tmp-build
-          tar --extract --file=../plugin.tar.gz --strip-components=1 --directory=../tmp-build
+          wp dist-archive . /tmp/plugin.tar.gz --format=targz
+          mkdir /tmp/tmp-build
+          tar --extract --file=/tmp/plugin.tar.gz --strip-components=1 --directory=/tmp/tmp-build
 
       - name: Run plugin check
         uses: wordpress/plugin-check-action@v1
