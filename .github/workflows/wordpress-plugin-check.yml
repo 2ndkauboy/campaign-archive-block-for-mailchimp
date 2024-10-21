@@ -11,10 +11,6 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: Set ENV variables
-        run: |
-          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
-
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -36,11 +32,11 @@ jobs:
 
       - name: Build plugin
         run: |
-          wp dist-archive . ./$REPO_NAME.zip
+          wp dist-archive . ./${{ github.event.repository.name }}.zip
           mkdir tmp-build
-          unzip $REPO_NAME.zip -d tmp-build
+          unzip ${{ github.event.repository.name }}.zip -d tmp-build
 
       - name: Run plugin check
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: ./tmp-build/$REPO_NAME
+          build-dir: ./tmp-build/${{ github.event.repository.name }}
