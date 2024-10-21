@@ -32,7 +32,7 @@ jobs:
 
       - name: Build plugin
         run: |
-          wp dist-archive . ./plugin.zip
+          wp dist-archive . ./plugin.zip --plugin-dirname=plugin
           mkdir tmp-build
           unzip plugin.zip -d tmp-build
 
