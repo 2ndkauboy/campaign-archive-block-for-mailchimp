@@ -18,6 +18,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 5.6
+          coverage: none
+          tools: wp-cli
       - run: composer install --no-dev --ignore-platform-reqs --optimize-autoloader
 
       - name: Assets build
