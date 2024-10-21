@@ -12,7 +12,7 @@
  * Description: Adds a block to show an archive for Mailchimp Campaigns.
  * Version: 2.2.0
  * Author: Bernhard Kau
- * Author URI: https://kau-boys.de
+ * Author URI: https://kau-boys.com
  * Text Domain: campaign-archive-block-for-mailchimp
  * License: GPLv3
  * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
@@ -27,7 +27,7 @@ define( 'CABFM_URL', plugin_dir_url( CABFM_FILE ) );
 cabfm_pre_init();
 
 /**
- * Pre init function to check the plugins compatibility.
+ * Pre init function to check the plugin's compatibility.
  */
 function cabfm_pre_init() {
 	// Check, if the min. required PHP version is available and if not, show an admin notice.
@@ -63,7 +63,7 @@ function cabfm_pre_init() {
 }
 
 /**
- * Show a admin notice error message, if the PHP version is too low.
+ * Show an admin notice error message, if the PHP version is too low.
  */
 function cabfm_min_php_version_error() {
 	echo '<div class="error"><p>';
@@ -72,7 +72,7 @@ function cabfm_min_php_version_error() {
 }
 
 /**
- * Show a admin notice error message, if the composer autoloader is missing.
+ * Show an admin notice error message, if the composer autoloader is missing.
  */
 function cabfm_autoloader_missing() {
 	echo '<div class="error"><p>';
@@ -81,7 +81,7 @@ function cabfm_autoloader_missing() {
 }
 
 /**
- * Show a admin notice error message, if the build files are missing.
+ * Show an admin notice error message, if the build files are missing.
  */
 function cabfm_build_files_missing() {
 	echo '<div class="error"><p>';
