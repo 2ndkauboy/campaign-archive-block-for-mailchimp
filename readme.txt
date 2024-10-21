@@ -2,8 +2,9 @@
 
 Contributors: Kau-Boy
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7914504
+Stable Tag: 2.2.0
 Requires at least: 5.0
-Tested up to: 6.5
+Tested up to: 6.7
 Requires PHP: 5.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
@@ -12,6 +13,7 @@ Tags: blocks, campaign, archive, mailchimp, block
 Adds a block to show an archive for Mailchimp campaigns.
 
 == Description ==
+
 In order to be able to use the plugin, you have to get API credentials from Mailchimp. You can find them in the [API keys section](https://us1.admin.mailchimp.com/account/api/) of your Mailchimp account. If you already use the plugin "Mailchimp" or "Mailchimp for WooCommence", the API key from these will automatically be used.
 
 The plugin allows you to show all campaigns from the connected Mailchimp account. You can show up to 100 campaign (this is a hard limit of the Mailchimp marketing API). For each campaign, you can either show the "Title" or the "Subject". You can also show the author/sender as well as the send date (and time).
