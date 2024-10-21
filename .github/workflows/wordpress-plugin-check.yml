@@ -27,6 +27,9 @@ jobs:
           npm install
           npm run build
 
+      - name: Install latest version of dist-archive-command
+        run: wp package install wp-cli/dist-archive-command:@stable
+
       - name: Build plugin
         run: |
           wp dist-archive . ./plugin.zip
