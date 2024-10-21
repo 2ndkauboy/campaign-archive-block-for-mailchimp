@@ -39,4 +39,4 @@ jobs:
       - name: Run plugin check
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: './tmp-build/plugin'
+          build-dir: './tmp-build/'
