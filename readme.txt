@@ -2,7 +2,7 @@
 
 Contributors: Kau-Boy
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7914504
-Stable Tag: 2.2.0
+Stable Tag: 2.2.1
 Requires at least: 5.0
 Tested up to: 6.7
 Requires PHP: 5.6
@@ -40,6 +40,10 @@ For better front end performance the campaign archive ist cached for 60 minutes.
 2. The block before setting up the API key
 
 == Changelog ==
+
+= 2.2.1 =
+* Update dependencies and recompile assets
+* Add Plugin Check GitHub Action
 
 = 2.2.0 =
 * Adding the two filters `cabfm_campaigns_query_args` and `cabfm_campaigns_markup` to enable changes on the queried or rendered campaigns.
