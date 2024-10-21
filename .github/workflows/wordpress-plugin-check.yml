@@ -25,7 +25,13 @@ jobs:
           npm install
           npm run build
 
+      - name: Build plugin
+        run: |
+          wp dist-archive . ./plugin.zip
+          mkdir tmp-build
+          unzip plugin.zip -d tmp-build
+
       - name: Run plugin check
         uses: wordpress/plugin-check-action@v1
         with:
-          exclude-files: '.distignore,.editorconfig,.eslintrc,.gitattributes'
+          build-dir: './tmp-build/plugin'
