@@ -27,3 +27,5 @@ jobs:
 
       - name: Run plugin check
         uses: wordpress/plugin-check-action@v1
+        with:
+          exclude-files: '.distignore,.editorconfig,.eslintrc,.gitattributes'
