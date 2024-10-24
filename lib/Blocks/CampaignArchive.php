@@ -75,6 +75,10 @@ class CampaignArchive {
 			return '<div class="components-placeholder"><div class="notice notice-error">' . __( 'An error has occurred, which probably means the API is down. Try again later.', 'campaign-archive-block-for-mailchimp' ) . '</div></div>';
 		}
 
+		if ( $campaigns['total_items'] === 0 ) {
+			return '<div class="components-placeholder"><div class="notice notice-info">' . __( 'There are no campaigns to display (with your current filters).', 'campaign-archive-block-for-mailchimp' ) . '</div></div>';
+		}
+
 		$list_items = '';
 		foreach ( $campaigns['campaigns'] as $campaign ) {
 			$title = 'title' === $attributes['campaignTitle'] ? $campaign['settings']['title'] : $campaign['settings']['subject_line'];
