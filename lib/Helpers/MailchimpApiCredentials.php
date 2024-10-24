@@ -159,7 +159,7 @@ class MailchimpApiCredentials {
 	 *
 	 * @return string
 	 */
-	public function update_api_key( $old_value, $value, $option  ) {
+	public function update_api_key( $old_value, $value, $option ) {
 		// Remove options if API key is empty.
 		if ( empty( $value ) ) {
 			delete_option( 'cabfm_api_key' );

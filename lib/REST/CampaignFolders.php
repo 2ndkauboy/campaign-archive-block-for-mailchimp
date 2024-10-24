@@ -13,6 +13,9 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 
+/**
+ * Class CampaignFolders
+ */
 class CampaignFolders {
 	/**
 	 * Initialize the class
@@ -40,6 +43,8 @@ class CampaignFolders {
 
 	/**
 	 * Get all campaign folders from the Mailchimp API.
+	 *
+	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.Found
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
 	 *
