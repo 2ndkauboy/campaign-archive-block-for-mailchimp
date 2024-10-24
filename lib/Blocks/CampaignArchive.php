@@ -67,16 +67,17 @@ class CampaignArchive {
 
 		$campaigns = MailchimpAPI::get_response_body( '/campaigns', $args );
 
+		// Use `wp_is_json_request()` in these returns, to only show the messages in the Block Editor.
 		if ( is_wp_error( $campaigns ) ) {
-			return '<div class="components-placeholder"><div class="notice notice-error"><strong>' . __( 'API Error:', 'campaign-archive-block-for-mailchimp' ) . '</strong> ' . $campaigns->get_error_message() . '</div></div>';
+			return wp_is_json_request() ? '<div class="components-placeholder"><div class="notice notice-error"><strong>' . __( 'API Error:', 'campaign-archive-block-for-mailchimp' ) . '</strong> ' . $campaigns->get_error_message() . '</div></div>' : '';
 		}
 
 		if ( ! isset( $campaigns['total_items'] ) ) {
-			return '<div class="components-placeholder"><div class="notice notice-error">' . __( 'An error has occurred, which probably means the API is down. Try again later.', 'campaign-archive-block-for-mailchimp' ) . '</div></div>';
+			return wp_is_json_request() ? '<div class="components-placeholder"><div class="notice notice-error">' . __( 'An error has occurred, which probably means the API is down. Try again later.', 'campaign-archive-block-for-mailchimp' ) . '</div></div>' : '';
 		}
 
 		if ( $campaigns['total_items'] === 0 ) {
-			return '<div class="components-placeholder"><div class="notice notice-info">' . __( 'There are no campaigns to display (with your current filters).', 'campaign-archive-block-for-mailchimp' ) . '</div></div>';
+			return wp_is_json_request() ? '<div class="components-placeholder"><div class="notice notice-info">' . __( 'There are no campaigns to display (with your current filters).', 'campaign-archive-block-for-mailchimp' ) . '</div></div>' : '';
 		}
 
 		$list_items = '';
