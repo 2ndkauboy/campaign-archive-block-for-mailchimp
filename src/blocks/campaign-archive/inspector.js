@@ -4,7 +4,16 @@
 import { __, _x, sprintf } from '@wordpress/i18n';
 import { ENTER } from '@wordpress/keycodes';
 import { InspectorControls } from '@wordpress/block-editor';
-import { Button, ExternalLink, PanelBody, RangeControl, SelectControl, TextControl, ToggleControl } from '@wordpress/components';
+import {
+	Button,
+	ComboboxControl,
+	ExternalLink,
+	PanelBody,
+	RangeControl,
+	SelectControl,
+	TextControl,
+	ToggleControl,
+} from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 
@@ -28,9 +37,22 @@ const Inspector = ( props ) => {
 		displaySender,
 		displayDate,
 		displayTime,
+		campaignFolder,
 	} = attributes;
 
 	const [ apiKeyInspectorState, setApiKeyInspectorState ] = useState( apiKeyObject.key );
+	const [ campaignFolderOptions, setCampaignFolderOptions ] = useState( [] );
+
+	useEffect( () => {
+		apiFetch( { path: '/cabfm/v1/campaign-folders' } ).then( ( res ) => {
+			// Rename object keys from the JSON response.
+			const newCampaignFolderOptions = res.map(option => ({
+				value: option.id,
+				label: option.name
+			}));
+			setCampaignFolderOptions( newCampaignFolderOptions );
+		} );
+	}, [] );
 
 	const handleKeyDown = ( keyCode ) => {
 		if ( keyCode !== ENTER ) {
@@ -116,6 +138,12 @@ const Inspector = ( props ) => {
 							checked={ !! displayTime }
 							onChange={ () => setAttributes( { displayTime: ! displayTime } ) }
 						/> }
+						<ComboboxControl
+							label={ __( 'Campaign folder', 'campaign-archive-block-for-mailchimp' ) }
+							value={ campaignFolder }
+							options={ campaignFolderOptions }
+							onChange={ newCampaignFolder => setAttributes( { campaignFolder: newCampaignFolder } ) }
+						/>
 					</PanelBody>
 				}
 				<PanelBody
