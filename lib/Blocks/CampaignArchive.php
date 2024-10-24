@@ -47,6 +47,11 @@ class CampaignArchive {
 			'sort_dir'   => 'DESC',
 		];
 
+		// Optionally filter by campaign folder.
+		if ( ! empty( $attributes['campaignFolder'] ) ) {
+			$query_args['folder_id'] = $attributes['campaignFolder'];
+		}
+
 		/**
 		 * Filters query arguments used to get the campaigns.
 		 *
