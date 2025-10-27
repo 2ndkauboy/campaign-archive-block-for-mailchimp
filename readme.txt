@@ -34,6 +34,10 @@ If you have successfully connected one of the two plugins to your Mailchimp acco
 
 For better front end performance, the campaign archive is cached for 60 minutes. You just have to wait one hour (at most) for the new campaign to show up. You can also change the cache curation using the `cabfm_cache_minutes` filter.
 
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the Campaign Archive Block for Mailchimp plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/8f490cd4-50b5-4e1d-b594-622aa6770074). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
 == Screenshots ==
 
 1. The block in the editor with its settings to adjust the output of the block and the API key settings
