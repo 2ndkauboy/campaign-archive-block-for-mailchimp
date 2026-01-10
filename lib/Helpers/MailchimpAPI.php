@@ -152,7 +152,7 @@ class MailchimpAPI {
 	 *
 	 * @return array|WP_Error The response from wp_safe_remote_request()
 	 */
-	public static function get_response_body( $endpoint, $args ) {
+	public static function get_response_body( $endpoint, $args = [] ) {
 		if ( empty( $args ) ) {
 			$args = [
 				'method' => 'GET',

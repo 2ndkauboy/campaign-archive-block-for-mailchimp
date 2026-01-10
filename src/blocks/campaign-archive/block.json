@@ -33,6 +33,10 @@
     "displayTime": {
       "type": "boolean",
       "default": false
+    },
+    "campaignFolder": {
+      "type": "string",
+      "default": ""
     }
   },
   "supports": {
