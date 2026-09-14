@@ -14,3 +14,6 @@ package-lock.json
 phpcs.xml
 .stylelintrc.json
 .wordpress-org
+.wp-env.json
+.wp-env.override.json
+CONTRIBUTING.md

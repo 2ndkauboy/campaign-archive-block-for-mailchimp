@@ -9,6 +9,13 @@
 		"build": "wp-scripts build",
 		"check-engines": "wp-scripts check-engines",
 		"check-licenses": "wp-scripts check-licenses",
+		"env": "wp-env",
+		"env:clean": "wp-env clean all",
+		"env:cli": "wp-env run cli wp",
+		"env:destroy": "wp-env destroy",
+		"env:logs": "wp-env logs",
+		"env:start": "wp-env start",
+		"env:stop": "wp-env stop",
 		"format:js": "wp-scripts format-js",
 		"format:js:src": "wp-scripts format-js ./src",
 		"lint:css": "wp-scripts lint-style",
@@ -27,6 +34,7 @@
 		"test:unit": "wp-scripts test-unit-js"
 	},
 	"devDependencies": {
+		"@wordpress/env": "^11.15.0",
 		"@wordpress/scripts": "^30.3.0"
 	}
 }
